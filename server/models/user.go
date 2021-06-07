@@ -1,10 +1,10 @@
 package models
 
 type User struct {
-	ID       string `json:"id" rethinkdb:"id,omitempty"`
-	Name     string `json:"name"`
-	Email    string `json:"email"`
-	Password string `json:"password"`
+	ID       string `rethinkdb:"id,omitempty"`
+	Name     string
+	Email    string
+	Password string
 }
 
 func (*User) TableName() string {

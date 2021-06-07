@@ -5,6 +5,7 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/compress"
+	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/fiber/v2/middleware/etag"
 	"github.com/mjarkk/go-graphql"
 	"github.com/mjarkk/orko/db"
@@ -24,6 +25,7 @@ func main() {
 
 	app.Use(etag.New())
 	app.Use(compress.New())
+	app.Use(cors.New(cors.Config{}))
 
 	app.Get("/", func(c *fiber.Ctx) error {
 		return c.JSON(map[string]string{
@@ -47,9 +49,6 @@ func main() {
 
 	db.Setup()
 	models.Bootstrap()
-
-	db.DropTable(&models.User{})
-	db.CreateTable(&models.User{})
 
 	log.Fatal(app.Listen(":8222"))
 }

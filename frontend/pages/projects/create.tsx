@@ -1,10 +1,37 @@
 import SetupModal from '../../components/SetupModal'
+import Loader from '../../components/Loading'
 import { ArrowRight, GitBranch } from 'react-feather'
 import { useState } from 'react'
+import { gql, useMutation } from '@apollo/client'
+import { useRouter } from 'next/router'
 
-export default function CreateProject() {
-	const [repoUrl, setRepoUrl] = useState('');
-	const [setupPage, setPage] = useState(0);
+const CREATE_PROJECT = gql`
+  mutation CreateProject($repo: String!) {
+    createProject(repo: $repo) {
+      ID
+    }
+  }
+`;
+
+export default function ProjectsCreate() {
+	const router = useRouter()
+	const [repoUrl, setRepoUrl] = useState('')
+	const [loading, setLoading] = useState(false)
+	const [setupPage, setPage] = useState(0)
+	const [createProjectReq] = useMutation(CREATE_PROJECT)
+
+	const createProject = async () => {
+		setLoading(true)
+		try {
+			const result = await createProjectReq({ variables: { repo: repoUrl } })
+			router.push('/projects/' + result.data.ID)
+		} catch (e) {
+			// TODO show error to user
+			console.log(e)
+		} finally {
+			setLoading(false)
+		}
+	}
 
 	return (
 		<div>
@@ -18,10 +45,13 @@ export default function CreateProject() {
 				</div>,
 				<div key="2">
 					<h1>Git repo</h1>
-					<div className="inputAndAction">
-						<input value={repoUrl} onChange={e => setRepoUrl(e.target.value)} placeholder="Repo URL" />
-						<button>Setup <ArrowRight /></button>
-					</div>
+					{loading
+						? <Loader />
+						: <div className="inputAndAction">
+							<input autoFocus value={repoUrl} onChange={e => setRepoUrl(e.target.value)} placeholder="Repo URL" />
+							<button onClick={createProject}>Setup <ArrowRight /></button>
+						</div>
+					}
 				</div>
 			]}</SetupModal>
 			<style jsx>{`
