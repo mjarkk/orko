@@ -14,12 +14,3 @@ func Insert(data InsertRequirements) error {
 	data.SetID(uuid.NewString())
 	return r.DB("orko").Table(data.TableName()).Insert(data).Exec(session)
 }
-
-type DropRequirements interface {
-	GetID() string
-	TableName() string
-}
-
-func Delete(data DropRequirements) error {
-	return r.DB("orko").Table(data.TableName()).Get(data.GetID()).Delete().Exec(session)
-}
