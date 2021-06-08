@@ -2,21 +2,14 @@ package schema
 
 import "github.com/mjarkk/orko/models"
 
-func (MethodRoot) ResolveCreateProject(args struct{ Repo string }) models.Project {
-	return models.Project{
-		ID: args.Repo,
-	}
+func (MethodRoot) ResolveCreateProject(args struct{ Repo string }) (*models.Project, error) {
+	return models.CreateProject(args.Repo)
 }
 
-func (QueryRoot) ResolveProjects() []models.Project {
-	return []models.Project{
-		{
-			ID:   "idk",
-			Name: "Test project 1",
-		},
-	}
+func (QueryRoot) ResolveProjects() ([]models.Project, error) {
+	return models.GetProjects()
 }
 
-func (QueryRoot) ResolveProject(args struct{ Id string }) models.Project {
-	return models.Project{}
+func (QueryRoot) ResolveProject(args struct{ Id string }) (models.Project, error) {
+	return models.GetProject()
 }

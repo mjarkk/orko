@@ -10,4 +10,4 @@ require (
 	github.com/mjarkk/go-graphql v0.0.0-20210604095247-1a621d53c91c
 )
 
-replace github.com/mjarkk/go-graphql => ../../grahql-go-mjarkk
+replace github.com/mjarkk/go-graphql => ../../go-grahql

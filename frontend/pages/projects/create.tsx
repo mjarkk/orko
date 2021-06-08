@@ -23,8 +23,11 @@ export default function ProjectsCreate() {
 	const createProject = async () => {
 		setLoading(true)
 		try {
-			const result = await createProjectReq({ variables: { repo: repoUrl } })
-			router.push('/projects/' + result.data.ID)
+			const {data} = await createProjectReq({ variables: { repo: repoUrl } })
+			const id = data?.createProject?.ID
+			if (id) {
+				router.push('/projects/' + id)
+			}
 		} catch (e) {
 			// TODO show error to user
 			console.log(e)

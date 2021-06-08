@@ -18,7 +18,12 @@ export default function App({ Component, pageProps }) {
 				margin-bottom: 10px;
 			}
 			p {
-				color: gray;
+				color: #717171;
+			}
+			a {
+				color: #0667f7;
+				text-decoration: none;
+				cursor: pointer;
 			}
 			input {
 				border: 1px solid #ccc;

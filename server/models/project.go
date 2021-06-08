@@ -8,6 +8,18 @@ type Project struct {
 	Name string
 }
 
+func GetProjects() ([]Project, error) {
+	res := []Project{}
+	err := db.GetAll(&Project{}, &res)
+	return res, err
+}
+
+func GetProject() (Project, error) {
+	res := Project{}
+	err := db.Get(&res)
+	return res, err
+}
+
 func (*Project) TableName() string {
 	return "users"
 }
