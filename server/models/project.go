@@ -14,10 +14,9 @@ func GetProjects() ([]Project, error) {
 	return res, err
 }
 
-func GetProject() (Project, error) {
+func GetProject(id string) (Project, error) {
 	res := Project{}
-	err := db.Get(&res)
-	return res, err
+	return res, db.GetByID(id, &res)
 }
 
 func (*Project) TableName() string {
@@ -44,4 +43,16 @@ func CreateProject(repo string) (*Project, error) {
 	}
 
 	return newProject, nil
+}
+
+func UpdateProject(id string) (*Project, error) {
+	var project Project
+	err := db.GetByID(id, &project)
+	if err != nil {
+		return nil, err
+	}
+
+	// TODO set data
+
+	return &project, nil
 }
