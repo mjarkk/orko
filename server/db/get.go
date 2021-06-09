@@ -2,8 +2,8 @@ package db
 
 import r "gopkg.in/rethinkdb/rethinkdb-go.v6"
 
-func Get(data InsertRequirements) error {
-	c, err := r.DB("orko").Table(data.TableName()).Run(session)
+func GetByID(id string, data TableRequirements) error {
+	c, err := r.DB("orko").Table(data.TableName()).Filter(map[string]string{"id": id}).Run(session)
 	if err != nil {
 		return err
 	}
