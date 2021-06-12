@@ -20,10 +20,11 @@ export default function ProjectsCreate() {
 	const [setupPage, setPage] = useState(0)
 	const [createProjectReq] = useMutation(CREATE_PROJECT)
 
-	const createProject = async () => {
+	const createProject = async (e: Event) => {
+		e.preventDefault()
 		setLoading(true)
 		try {
-			const {data} = await createProjectReq({ variables: { repo: repoUrl } })
+			const { data } = await createProjectReq({ variables: { repo: repoUrl } })
 			const id = data?.createProject?.ID
 			if (id) {
 				router.push('/projects/' + id)
@@ -46,16 +47,16 @@ export default function ProjectsCreate() {
 						<button onClick={() => setPage(1)}><GitBranch /> From git repo <ArrowRight /></button>
 					</div>
 				</div>,
-				<div key="2">
+				<form key="2" onSubmit={createProject}>
 					<h1>Git repo</h1>
 					{loading
 						? <Loader />
 						: <div className="inputAndAction">
 							<input autoFocus value={repoUrl} onChange={e => setRepoUrl(e.target.value)} placeholder="Repo URL" />
-							<button onClick={createProject}>Setup <ArrowRight /></button>
+							<button type="submit">Setup <ArrowRight /></button>
 						</div>
 					}
-				</div>
+				</form>
 			]}</SetupModal>
 			<style jsx>{`
 				.actions {

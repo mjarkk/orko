@@ -11,7 +11,7 @@ const QUERY = gql`{
 
 export default function Projects() {
     const { data, loading, error } = useQuery(QUERY);
-    
+
     if (loading) {
         return <div>Loading..</div>
     }
@@ -19,9 +19,9 @@ export default function Projects() {
     if (error) {
         return <div>Error: {error.toString()}</div>
     }
-    
+
     return <div className="projects">
-        {data.projects.map(project => 
+        {data.projects.map(project =>
             <Link href={`/projects/${project.ID}`} key={project.ID}>
                 <a className="project">
                     <h3>{project.name}</h3>
@@ -29,7 +29,10 @@ export default function Projects() {
                 </a>
             </Link>
         )}
-        <p className="noProjectsYet"><b>No projects, <Link href="/projects/create"><a>create one</a></Link></b></p>
+        {data.projects.length == 0
+            ? <p className="noProjectsYet"><b>No projects, <Link href="/projects/create"><a>create one</a></Link></b></p>
+            : ''
+        }
         <style jsx>{`
             .projects {
                 display: flex;

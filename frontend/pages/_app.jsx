@@ -16,6 +16,12 @@ export default function App({ Component, pageProps }) {
 			}
 			h1 {
 				margin-bottom: 10px;
+				font-size: 2rem;
+				font-weight: bold;
+			}
+			h1 input {
+				font-size: 2rem;
+				font-weight: bold;
 			}
 			p {
 				color: #717171;
