@@ -1,4 +1,4 @@
-import { gql, useQuery } from "@apollo/client"
+import { gql, useMutation, useQuery } from "@apollo/client"
 import { useRouter } from "next/router"
 import QueryState from '../../components/QueryState'
 import EditableH1 from '../../components/EditableH1'
@@ -12,23 +12,31 @@ query getProject($id: String){
 }`
 
 const UpdateProjectQuery = gql`
-mutation updateProject($id: String) {
-    updateProject(id: $id) { name }
+mutation updateProject($id: String $name: String) {
+    updateProject(id: $id, name: $name) { name }
 }
 `
 
 export default function ProjectsProject() {
     const router = useRouter()
     const { id } = router.query
-    const { data, loading, error } = useQuery(FetchProjectQuery, { variables: { id }, skip: !id })
+    const variables = { id }
+    const { data, loading, error, refetch } = useQuery(FetchProjectQuery, { variables, skip: !id })
     const cantShowData = QueryState({ loading, error, data })
+    const [updateProjectReq] = useMutation(UpdateProjectQuery)
+
     if (cantShowData) {
         return cantShowData
     }
 
+    const saveNewName = async (name: string) => {
+        await updateProjectReq({variables: {id, name}})
+        await refetch(variables)
+    }
+
     const { project } = data
     return <div className="project">
-        <EditableH1 value={project.name} save={v => console.log('todo', v)} placeholder="Project name">
+        <EditableH1 value={project.name} save={newName => saveNewName(newName)} placeholder="Project name">
             {project.name || <span className="empty-name">No name given</span>}
         </EditableH1>
         <p>{project.repo}</p>

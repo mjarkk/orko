@@ -45,14 +45,27 @@ func CreateProject(repo string) (*Project, error) {
 	return newProject, nil
 }
 
-func UpdateProject(id string) (*Project, error) {
+type UpdateProjectData struct {
+	Name *string
+}
+
+func UpdateProject(id string, data UpdateProjectData) (*Project, error) {
 	var project Project
 	err := db.GetByID(id, &project)
 	if err != nil {
 		return nil, err
 	}
 
-	// TODO set data
+	projectUpdated := false
+
+	if data.Name != nil {
+		projectUpdated = true
+		project.Name = *data.Name
+	}
+
+	if projectUpdated {
+		db.Update(&project)
+	}
 
 	return &project, nil
 }
